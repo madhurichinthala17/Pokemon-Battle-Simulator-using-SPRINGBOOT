@@ -8,6 +8,24 @@
 <body>
 <div id="app" class="section is-size-2">
     <p>{{ pokemonName }} wins</p>
+
+    <!-- User Input for Pokémon Numbers -->
+    <div class="field">
+        <label class="label">Choose First Pokémon Number (1-493):</label>
+        <div class="control">
+            <input class="input" type="number" v-model.number="firstNum" min="1" max="493" placeholder="Enter a number">
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Choose Second Pokémon Number (1-493):</label>
+        <div class="control">
+            <input class="input" type="number" v-model.number="secondNum" min="1" max="493" placeholder="Enter a number">
+        </div>
+    </div>
+
+    <p class="has-text-danger" v-if="errorMessage">{{ errorMessage }}</p>
+
     <p>
         <button v-on:click="battle()">Battle!</button>
     </p>
