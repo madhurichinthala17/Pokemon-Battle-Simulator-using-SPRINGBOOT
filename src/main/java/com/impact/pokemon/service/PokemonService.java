@@ -1,4 +1,3 @@
-
 package com.impact.pokemon.service;
 
 import com.impact.pokemon.model.Pokemon;
@@ -7,10 +6,12 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class PokemonService {
-    private List<Pokemon> pokemons;
+
+    protected List<Pokemon> pokemons;
 
     @PostConstruct
     public void init() {
@@ -24,14 +25,24 @@ public class PokemonService {
 
     public Pokemon getPokemonByNum(int num) {
         return pokemons.stream()
-                .filter(pokemon -> pokemon.getNum()==num)
+                .filter(pokemon -> pokemon.getNum() == num)
                 .findFirst()
                 .orElse(null);
     }
 
-    public Pokemon battle(Pokemon pokemon1, Pokemon pokemon2) {
+    //battle code, and pokemon's taking turns when there is still HP balance
+    public BattleResult battle(Pokemon pokemon1, Pokemon pokemon2) {
+        Random random = new Random();
+
+        int initialHp1 = pokemon1.getHp();
+        int initialHp2 = pokemon2.getHp();
+
+
+        boolean isFirstPokemonsTurn = pokemon1.getSpeed() > pokemon2.getSpeed() ||
+                (pokemon1.getSpeed() == pokemon2.getSpeed() && random.nextBoolean());
+
         while (pokemon1.getHp() > 0 && pokemon2.getHp() > 0) {
-            if (pokemon1.getSpeed() > pokemon2.getSpeed()) {
+            if (isFirstPokemonsTurn) {
                 attack(pokemon1, pokemon2);
                 if (pokemon2.getHp() > 0) {
                     attack(pokemon2, pokemon1);
@@ -42,8 +53,18 @@ public class PokemonService {
                     attack(pokemon1, pokemon2);
                 }
             }
+            isFirstPokemonsTurn = !isFirstPokemonsTurn;
         }
-        return pokemon1.getHp() > 0 ? pokemon1 : pokemon2;
+
+        Pokemon winner = pokemon1.getHp() > 0 ? pokemon1 : pokemon2;
+
+        BattleResult result = new BattleResult(winner.getName(), winner.getHp(), winner.getImage());
+
+
+        pokemon1.setHp(initialHp1);
+        pokemon2.setHp(initialHp2);
+
+        return result;
     }
 
     private void attack(Pokemon attacker, Pokemon defender) {
@@ -52,7 +73,7 @@ public class PokemonService {
         defender.setHp(defender.getHp() - damage);
     }
 
-    private double getEffectiveness(String attackType, String defenseType) {
+    public double getEffectiveness(String attackType, String defenseType) {
         switch (attackType.toLowerCase()) {
             case "fire":
                 if (defenseType.equalsIgnoreCase("grass")) return 2.0;
@@ -73,10 +94,35 @@ public class PokemonService {
         }
         return 1.0;
     }
+
     private void assignImages() {
         for (Pokemon pokemon : pokemons) {
             String imageUrl = "https://img.pokemondb.net/sprites/home/normal/" + pokemon.getName().toLowerCase() + ".png";
             pokemon.setImage(imageUrl);
+        }
+    }
+
+    public static class BattleResult {
+        private final String winner;
+        private final int remainingHp;
+        private final String image;
+
+        public BattleResult(String winner, int remainingHp, String image) {
+            this.winner = winner;
+            this.remainingHp = remainingHp;
+            this.image = image;
+        }
+
+        public String getWinner() {
+            return winner;
+        }
+
+        public int getRemainingHp() {
+            return remainingHp;
+        }
+
+        public String getImage() {
+            return image;
         }
     }
 }

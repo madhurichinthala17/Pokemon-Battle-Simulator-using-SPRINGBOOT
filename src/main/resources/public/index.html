@@ -7,30 +7,62 @@
 </head>
 <body>
 <div id="app" class="section is-size-2">
-    <p>{{ pokemonName }} wins</p>
+    <!-- Welcome Message -->
+    <div v-if="showWelcome" class="welcome-message">
+        <h1 class="title">Welcome to the Battle Field!</h1>
+    </div>
 
     <!-- User Input for Pokémon Numbers -->
-    <div class="field">
-        <label class="label">Choose First Pokémon Number (1-493):</label>
-        <div class="control">
-            <input class="input" type="number" v-model.number="firstNum" min="1" max="493" placeholder="Enter a number">
+    <div v-else>
+        <p>{{ result }}</p>
+
+        <div class="field">
+            <label class="label">Choose First Pokémon Number (1-493):</label>
+            <div class="control">
+                <input class="input" type="number" v-model.number="firstNum" min="1" max="493" placeholder="Enter a number">
+            </div>
+        </div>
+
+        <div class="field">
+            <label class="label">Choose Second Pokémon Number (1-493):</label>
+            <div class="control">
+                <input class="input" type="number" v-model.number="secondNum" min="1" max="493" placeholder="Enter a number">
+            </div>
+        </div>
+
+        <p class="has-text-danger" v-if="errorMessage">{{ errorMessage }}</p>
+
+        <p>
+            <button class="button is-primary" v-on:click="fetchPokemonDetails">Battle!</button>
+        </p>
+        <div v-if="showDetails" class="pokemon-details-container">
+            <hr/>
+            <div>
+                <h2>{{ pokemon1Details.name }} ({{ pokemon1Details.number }})</h2>
+                <img class="sprite" :src="pokemon1Details.image" alt="Pokemon 1"/>
+                <p>Type: {{ pokemon1Details.type }}</p>
+                <p>HP: {{ pokemon1Details.hp }}</p>
+                <p>Attack: {{ pokemon1Details.attack }}</p>
+                <p>Defense: {{ pokemon1Details.defense }}</p>
+                <p>Speed: {{ pokemon1Details.speed }}</p>
+            </div>
+            <div>
+                <h2>{{ pokemon2Details.name }} ({{ pokemon2Details.number }})</h2>
+                <img class="sprite" :src="pokemon2Details.image" alt="Pokemon 2"/>
+                <p>Type: {{ pokemon2Details.type }}</p>
+                <p>HP: {{ pokemon2Details.hp }}</p>
+                <p>Attack: {{ pokemon2Details.attack }}</p>
+                <p>Defense: {{ pokemon2Details.defense }}</p>
+                <p>Speed: {{ pokemon2Details.speed }}</p>
+            </div>
+        </div>
+        <div v-if="winner">
+            <hr/>
+            <h2>{{ winner.name }} wins!</h2>
+            <img class="sprite" :src="winner.image" alt="Winner"/>
+            <p>Remaining HP: {{ winner.hp }}</p>
         </div>
     </div>
-
-    <div class="field">
-        <label class="label">Choose Second Pokémon Number (1-493):</label>
-        <div class="control">
-            <input class="input" type="number" v-model.number="secondNum" min="1" max="493" placeholder="Enter a number">
-        </div>
-    </div>
-
-    <p class="has-text-danger" v-if="errorMessage">{{ errorMessage }}</p>
-
-    <p>
-        <button v-on:click="battle()">Battle!</button>
-    </p>
-    <hr/>
-    <img class="sprite" v-bind:src="'https://img.pokemondb.net/sprites/home/normal/' + pokemonName.toLowerCase() + '.png'"/>
 </div>
 <script src="app.js"></script>
 </body>

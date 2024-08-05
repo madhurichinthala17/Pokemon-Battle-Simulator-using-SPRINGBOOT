@@ -1,6 +1,6 @@
 #,Name,Type,Total,HitPoints,Attack,Defense,SpecialAttack,SpecialDefense,Speed,Generation,Legendary
-1,Bulbasaur,Grass,318,45,49,49,65,65,45,1,FALSE
-2,Ivysaur,Grass,405,60,62,63,80,80,60,1,FALSE
+1,Bulbasaur,Grass,318,200,150,100,65,65,90,1,FALSE
+2,Ivysaur,Grass,405,180,140,120,80,80,95,1,FALSE
 3,Venusaur,Grass,525,80,82,83,100,100,80,1,FALSE
 4,Charmander,Fire,309,39,52,43,60,50,65,1,FALSE
 5,Charmeleon,Fire,405,58,64,58,80,65,80,1,FALSE
