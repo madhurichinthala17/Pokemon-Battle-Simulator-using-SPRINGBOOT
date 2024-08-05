@@ -26,3 +26,9 @@ Access the application by visiting `http://localhost:8080` in your web browser.
 Run the unit tests by using below command:
 `./gradlew test`
 
+
+###References used
+`https://youtu.be/jqwZthuBmZY?si=siOHILsiMAulNhJh` Playlist to use mockito
+ChatGPT -  used in case of errors. 
+Referred to `https://youtu.be/31KTdfRH6nY?si=aJ5QOg9y6z5Kg0eE` Playlist in case of doubts
+
